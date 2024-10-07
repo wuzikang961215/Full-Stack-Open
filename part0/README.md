@@ -38,7 +38,8 @@ sequenceDiagram
     server-->>browser: [{ "content": "HTML is easy", "date": "2023-1-1" }, ... ]
     deactivate server
 
-    Note right of browser: The browser executes the callback function that renders the notes```
+    Note right of browser: The browser executes the callback function that renders the notes
+```
 
 
 ## Exercise 0.5
@@ -70,4 +71,5 @@ sequenceDiagram
     server-->>browser: [{ "content": "6", "date": "2024-10-7" }, ... ]
     deactivate server
 
-    Note right of browser: The browser executes the callback function that renders the notes```
+    Note right of browser: The browser executes the callback function that renders the notes
+```
