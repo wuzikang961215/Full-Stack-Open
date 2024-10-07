@@ -1,8 +1,8 @@
-# Part 0 Documentation
+# Part 0 Exercises
 
 Exercise for part0.
 
-## 0.4
+## Exercise 0.4
 
 ```mermaid
 sequenceDiagram
