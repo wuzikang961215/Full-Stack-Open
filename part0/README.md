@@ -39,10 +39,11 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
-Exercise 0.5
 
-mermaid
-Copy code
+
+## Exercise 0.5
+
+```mermaid
 sequenceDiagram
     participant browser
     participant server
