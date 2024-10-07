@@ -39,10 +39,10 @@ sequenceDiagram
     deactivate server
 
     Note right of browser: The browser executes the callback function that renders the notes
+Exercise 0.5
 
-
-## Exercise 0.5
-```mermaid
+mermaid
+Copy code
 sequenceDiagram
     participant browser
     participant server
@@ -69,3 +69,4 @@ sequenceDiagram
     server-->>browser: [{ "content": "6", "date": "2024-10-7" }, ... ]
     deactivate server
 
+    Note right of browser: The browser executes the callback function that renders the notes
