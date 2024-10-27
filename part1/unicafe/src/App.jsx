@@ -12,32 +12,41 @@ const Button = ({ handleClick, text }) => (
   </button>
 );
 
-// StatisticLine Component for displaying individual statistic lines
-const StatisticLine = ({ name, count }) => {
-  if (name === 'positive') {
-    return (
-      <div>{name} {count} %</div>
-    );
-  }
-  return (
-    <div>{name} {count}</div>
-  );
-};
-
-// Statistics Component for displaying all statistics
+// Statistics Component for displaying all statistics or a "No feedback given" message in a table format
 const Statistics = ({ good, neutral, bad, total, average, percentPos }) => {
   if (total === 0) {
-    return <div>No feedback given</div>
+    return <div>No feedback given</div>;
   }
+
   return (
-    <div>
-      <StatisticLine name='good' count={good} />
-      <StatisticLine name='neutral' count={neutral} />
-      <StatisticLine name='bad' count={bad} />
-      <StatisticLine name='total' count={total} />
-      <StatisticLine name='average' count={average} />
-      <StatisticLine name='positive' count={percentPos} />
-    </div>
+    <table>
+      <tbody>
+        <tr>
+          <td>good</td>
+          <td>{good}</td>
+        </tr>
+        <tr>
+          <td>neutral</td>
+          <td>{neutral}</td>
+        </tr>
+        <tr>
+          <td>bad</td>
+          <td>{bad}</td>
+        </tr>
+        <tr>
+          <td>total</td>
+          <td>{total}</td>
+        </tr>
+        <tr>
+          <td>average</td>
+          <td>{average.toFixed(1)}</td>
+        </tr>
+        <tr>
+          <td>positive</td>
+          <td>{percentPos.toFixed(1)} %</td>
+        </tr>
+      </tbody>
+    </table>
   );
 };
 
