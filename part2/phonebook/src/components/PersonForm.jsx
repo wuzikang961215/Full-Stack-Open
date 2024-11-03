@@ -3,14 +3,18 @@ const PersonForm = ({ addPerson, newName, handleNameChange, newNumber, handleNum
       <form onSubmit={addPerson}>
         <div>
           name: <input
+            id="name"
             value={newName}
             onChange={handleNameChange}
+            autoComplete="name"
           />
         </div>
         <div>
           number: <input
+            id="number"
             value={newNumber}
             onChange={handleNumberChange}
+            autoComplete="tel"
           />
         </div>
         <div>

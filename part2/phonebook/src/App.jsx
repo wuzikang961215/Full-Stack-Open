@@ -1,37 +1,97 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
+import personService from './services/persons'
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
-    { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
-    { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [alertMessage, setAlertMessage] = useState(null)
+
+  useEffect(() => {
+    personService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons)
+      })
+  }, [])
+
+  const Notification = ({ message }) => {
+    if (message === null) {
+      return null
+    }
+  
+    return (
+      <div className='alert'>
+        {message}
+      </div>
+    )
+  }
+
 
   const addPerson = (event) => {
     event.preventDefault()
-    const nameExists = persons.some(person => person.name === newName)
+    const existingPerson = persons.find(person => person.name === newName)
 
-    if (nameExists) {
-      alert(`${newName} is already added to phonebook`)
-    } else {
-      const nameObject = {
-        name: newName,
-        number: newNumber,
-        id: String(persons.length + 1)
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${existingPerson.name} is already in the phonebook, replace the old number with the new one?`
+      )
+
+      if (confirmUpdate) {
+        const updatedPerson = { ...existingPerson, number: newNumber }
+        
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then(returnedPerson => {
+            setPersons(persons.map(person =>
+              person.id !== existingPerson.id ? person : returnedPerson
+            ))
+            setAlertMessage(`Updated ${returnedPerson.name}'s number`)
+            setTimeout(() => {
+            setAlertMessage(null)
+            }, 5000) // Clear alert after 5 seconds
+          })
+          .catch(error => {
+            setAlertMessage(`Information of ${existingPerson.name} has already been removed from server`)
+            setTimeout(() => {
+              setAlertMessage(null)
+            }, 5000) // Clear alert after 5 seconds
+          })
       }
-      setPersons(persons.concat(nameObject))
+    } else {
+      const personObject = {
+        name: newName,
+        number: newNumber
+      }
+      personService
+      .create(personObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setAlertMessage(`Added ${returnedPerson.name}`)
+        setTimeout(() => {
+          setAlertMessage(null)
+        }, 5000) // Clear alert after 5 seconds
+      })
     }
     setNewName('')
     setNewNumber('')
   }
 
+  const removePerson = id => {
+    const personToRemove = persons.find(person => person.id === id)
+    if (window.confirm(`Delete ${personToRemove.name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          setPersons(persons.filter(person => person.id !== id))
+        })
+    }
+  }
+  
   const handleNameChange = (event) => {
     setNewName(event.target.value)
   }
@@ -54,6 +114,8 @@ const App = () => {
     <div>
       <h2>Phonebook</h2>
 
+      <Notification message={alertMessage} />
+
       <Filter 
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
@@ -71,7 +133,7 @@ const App = () => {
 
       <h3>Numbers</h3>
 
-      <Persons personsToShow={personsToShow} />
+      <Persons personsToShow={personsToShow} removePerson={removePerson} />
     </div>
   )
 }
