@@ -56,7 +56,9 @@ const App = () => {
             }, 5000) // Clear alert after 5 seconds
           })
           .catch(error => {
-            setAlertMessage(`Information of ${existingPerson.name} has already been removed from server`)
+            const errorMessage = error.response?.data?.error || 'An unknown error occurred';
+
+            setAlertMessage(`${errorMessage}`)
             setTimeout(() => {
               setAlertMessage(null)
             }, 5000) // Clear alert after 5 seconds
@@ -76,6 +78,15 @@ const App = () => {
           setAlertMessage(null)
         }, 5000) // Clear alert after 5 seconds
       })
+      .catch(error => {
+        const errorMessage = error.response?.data?.error || 'An unknown error occurred';
+        console.error('Error:', errorMessage); // Log error for debugging
+      
+        // Ensure setAlertMessage is a string, not an object
+        setAlertMessage(`${errorMessage}`);
+      
+        setTimeout(() => setAlertMessage(null), 5000);
+      });      
     }
     setNewName('')
     setNewNumber('')
